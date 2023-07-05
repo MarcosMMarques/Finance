@@ -40,11 +40,11 @@ def register_bank(request):
     person_type = request.POST.get('person_type')
     value = request.POST.get('value')
     icon = request.FILES.get('icon')
-    image_extensions = ['.jpg', '.jpeg', '.png', '.bmp']
+    image_extensions = ['jpg', 'jpeg', 'png', 'bmp']
     icon_extension = imghdr.what(icon)
 
     if( len(nickname.strip()) == 0 or len(value.strip()) == 0 
-        or not isinstance(value, float) or not (icon_extension in image_extensions) 
+        or not isinstance(float(value), float) or not (icon_extension in image_extensions) 
     ):
         messages.add_message(request, constants.ERROR, 'Preencha todos os campos')
         return redirect('/profile/manage/')
