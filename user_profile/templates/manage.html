@@ -1,0 +1,144 @@
+{% extends 'bases/base.html' %} {% load static %} {% block 'head' %}
+
+<link href="{% static 'user_profile/css/home.css' %}" rel="stylesheet" />
+<link href="{% static 'user_profile/css/gerenciar.css' %}" rel="stylesheet" />
+
+{% endblock %} {% block 'body' %}
+<br />
+<br />
+<div class="container">
+  <div class="row">
+    {% if messages %} {% for message in messages %}
+    <div class="alert {{ message.tags }}">{{ message }}</div>
+    {% endfor %} {% endif %}
+    <div class="col-md-5">
+      <p class="fonte-destaque">Suas contas</p>
+      <hr />
+
+      <div class="contas">
+        {% for account in accounts %}
+        <div class="lista-contas-main">
+          <span
+            ><img width="10%" src="{{account.icon.url}}" />&nbsp&nbsp
+            {{account.nickname}}</span
+          >
+
+          <span class="total-conta positivo"
+            >R$ {{account.value}}&nbsp&nbsp&nbsp
+            <a href="/profile/delete_bank/{{account.id}}"
+              ><img src="{% static 'user_profile/img/exit.png' %}" /></a
+          ></span>
+        </div>
+        <br />
+        {% endfor %}
+      </div>
+
+      <hr />
+      <span class="fonte-destaque">Total:</span>
+      <span class="positivo total-conta font-destaque"
+        >R$ {{total_account}}</span
+      >
+    </div>
+
+    <div class="col-md-2"></div>
+
+    <div class="col-md-5">
+      <p class="fonte-destaque">Nova conta</p>
+
+      <form
+        action="{% url 'register_bank' %}"
+        method="POST"
+        enctype="multipart/form-data"
+      >
+        {% csrf_token %}
+        <label>Apelido</label>
+        <input
+          type="text"
+          name="nickname"
+          class="form-control"
+          placeholder=""
+        />
+        <br />
+        <label>Banco</label>
+        <select name="bank" class="form-select">
+          {% for choice in bank_choices %}
+          <option value="{{ choice.0 }}">{{ choice.1 }}</option>
+          {% endfor %}
+        </select>
+        <br />
+        <label>Tipo</label>
+        <select name="person_type" class="form-select">
+          <option value="pf">Pessoa física</option>
+          <option value="pj">Pessoa jurídica</option>
+        </select>
+        <br />
+        <label>Valor</label>
+        <input type="number" name="value" class="form-control" placeholder="" />
+        <br />
+        <input type="file" placeholder="Ícone" name="icon" required />
+        <br />
+        <br />
+        <input
+          style="width: 100%"
+          type="submit"
+          class="botao-principal"
+          value="Enviar"
+        />
+      </form>
+    </div>
+  </div>
+
+  <hr />
+
+  <div class="row">
+    <div class="col-md-5">
+      <span class="fonte-destaque">Nova categoria</span>
+
+      <form action="{% url 'register_category' %}" method="POST">
+        {% csrf_token %}
+        <label>Categoria</label>
+        <input type="text" name="category" class="form-control" />
+        <br />
+
+        <input type="checkbox" name="essential" value="essencial" /><label
+          class="positivo"
+          >&nbspEssencial</label
+        >
+        <br />
+        <br />
+        <input
+          style="width: 100%"
+          type="submit"
+          class="botao-principal"
+          value="Adicionar"
+        />
+      </form>
+    </div>
+
+    <div class="col-md-2"></div>
+
+    <div class="col-md-5">
+      <span class="fonte-destaque">Suas categoria</span>
+      <br />
+      <div class="contas">
+        {% for category in categorys %}
+        <div class="lista-contas-main">
+          <span>{{category.category}}</span>
+          <span class="total-conta"
+            ><a href="{% url 'update_category' category.id %}"
+              ><img
+                src="{% if category.essential %} 
+                    {% static 'user_profile/img/check.png' %} 
+                  {%else %} 
+                    {% static 'user_profile/img/exit.png' %} 
+                  {% endif %}"
+              /> </a
+          ></span>
+        </div>
+        <br />
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
