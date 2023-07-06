@@ -1,0 +1,27 @@
+{% load static %}
+<div class="card">
+  <table>
+    <tr>
+      <th>Conta</th>
+      <th>Categoria</th>
+      <th>Data</th>
+      <th>Tipo</th>
+      <th>valor</th>
+    </tr>
+    {% for bank_statement in bank_statements %}
+    <tr class="linha">
+      <td width="10%">{{bank_statement.account}}</td>
+      <td>{{bank_statement.category}}</td>
+      <td>{{bank_statement.date}}</td>
+      <td>
+        {% if bank_statement.kind == 'O'%}
+        <img src="{% static 'bank_statement/img/outputs.png' %}" />
+        {% else %}
+        <img src="{% static 'bank_statement/img/inputs.png' %}" />
+        {% endif %}
+      </td>
+      <td>R$ {{bank_statement.value}}</td>
+    </tr>
+    {% endfor %}
+  </table>
+</div>

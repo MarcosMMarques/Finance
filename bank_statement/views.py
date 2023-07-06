@@ -1,10 +1,15 @@
+import os
 from django.shortcuts import render, redirect
 from user_profile.models import Account, Category
-from django.http import HttpResponse
+from django.http import HttpResponse, FileResponse
 from .models import BankStatement
 from django.contrib import messages
 from django.contrib.messages import constants
 from datetime import datetime, timedelta
+from django.template import loader
+from django.conf import settings
+from weasyprint import HTML
+from io import BytesIO
 
 def new_value(request):
     if request.method == 'GET':
@@ -75,3 +80,15 @@ def view_extract(request):
                                                     'bank_statements' : bank_statements.order_by('-date')
                                                 }
     )
+
+def export_pdf(request):
+    bank_statements = BankStatement.objects.all()
+
+    path_template = os.path.join(settings.BASE_DIR, 'templates/partials/statement.html')
+    template_render = loader.render_to_string(path_template, {'bank_statements' : bank_statements})
+    
+    path_output = BytesIO()
+    HTML(string=template_render).write_pdf(path_output)
+    path_output.seek(0)
+
+    return FileResponse(path_output, filename="extrato.pdf")
