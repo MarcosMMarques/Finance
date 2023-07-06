@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'user_profile',
     'bank_statement',
+    'planning',
 ]
 
 MIDDLEWARE = [

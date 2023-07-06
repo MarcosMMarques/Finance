@@ -1,0 +1,73 @@
+{% extends 'bases/base.html' %} {% load static %} {% block 'head' %}
+
+<link href="{% static 'user_profile/css/home.css' %}" rel="stylesheet" />
+<link href="{% static 'user_profile/css/manage.css' %}" rel="stylesheet" />
+<link
+  href="{% static 'bank_statement/css/view_extract.css' %}"
+  rel="stylesheet"
+/>
+
+{% endblock %} {% block 'body' %}
+
+<div class="container">
+  <br />
+  {% if messages %} {% for message in messages %}
+  <div class="alert {{ message.tags }}">{{ message }}</div>
+  {% endfor %} {% endif %}
+  <br />
+  <p class="fonte-destaque">Definir planejamento</p>
+  <div class="card">
+    <table>
+      <tr>
+        <th>Categoria</th>
+        <th>Valor</th>
+        <th>Ação</th>
+      </tr>
+
+      {% for category in categorys %}
+      <tr class="linha">
+        <td>{{category}}</td>
+        <td>
+          <input
+            type="text"
+            id="planning-cost-{{category.id}}"
+            class="form-control"
+            value="{{category.planning_cost}}"
+          />
+        </td>
+        <td>
+          <button
+            onClick="updateCategoryPlanningCost({{category.id}})"
+            style="width: 100%"
+            class="botao-secundario"
+          >
+            Salvar
+          </button>
+        </td>
+      </tr>
+      {% endfor %}
+    </table>
+  </div>
+</div>
+
+<script>
+  function updateCategoryPlanningCost(id) {
+    value = document.getElementById("planning-cost-" + id).value;
+
+    fetch("/planning/update_planning_cost/" + id, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ new_value: value }),
+    })
+      .then(function (result) {
+        return result.json();
+      })
+      .then(function (data) {
+        console.log(data);
+      });
+  }
+</script>
+
+{% endblock %}
