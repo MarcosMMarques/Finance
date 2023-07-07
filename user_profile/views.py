@@ -5,6 +5,8 @@ from django.contrib import messages
 from django.contrib.messages import constants
 from django.db.models import Sum
 from django.core.files.uploadedfile import UploadedFile
+from bank_statement.models import BankStatement
+from datetime import datetime
 import imghdr
 
 
@@ -95,3 +97,17 @@ def update_category(request, id):
 
     messages.add_message(request, constants.SUCCESS, 'Categoria atualizada com sucesso')
     return redirect('/profile/manage')
+
+def dashboard(request):
+    data = {}
+    categorys = Category.objects.all()
+
+    for category in categorys:
+        total = 0
+        sum = BankStatement.objects.filter(category=category, date__month=datetime.now().month, kind="O").aggregate(Sum('value'))['value__sum']
+        total +=  sum if sum else 0
+        data[category.category] = total
+        
+    print(data)
+    return render(request, 'dashboard.html', {'labels' : list(data.keys()), 
+                                              'values' : list(data.values())})
