@@ -14,6 +14,16 @@ def home(request):
     accounts = Account.objects.all()
     total_account = accounts.aggregate(Sum('value'))['value__sum']
     category_quantity = Category.objects.count()
+
+    bank_statements = BankStatement.objects.all()
+    total_inputs = bank_statements.filter(kind='I').aggregate(Sum('value'))['value__sum']
+    total_outputs = bank_statements.filter(kind='O').aggregate(Sum('value'))['value__sum']
+
+    bank_statements_in_month = BankStatement.objects.filter(date__month=datetime.now().month)
+    total_inputs_in_month = bank_statements_in_month.filter(kind='I').aggregate(Sum('value'))['value__sum']
+    total_outputs_in_month = bank_statements_in_month.filter(kind='O').aggregate(Sum('value'))['value__sum']
+    monthly_balance = total_inputs_in_month - total_outputs_in_month
+
     essential_category_percent = Category.objects.filter(essential=True).count() / category_quantity * 100
     not_essential_category_percent = Category.objects.filter(essential=False).count() / category_quantity * 100
     
@@ -21,7 +31,12 @@ def home(request):
                     {
                         'accounts': accounts, 'total_account': total_account, 
                         'essential_category_percent': int(essential_category_percent),
-                        'not_essential_category_percent': int(not_essential_category_percent)
+                        'not_essential_category_percent': int(not_essential_category_percent),
+                        'total_inputs' : total_inputs,
+                        'total_outputs' : total_outputs,
+                        'total_inputs_in_month' : total_inputs_in_month,
+                        'total_outputs_in_month' : total_outputs_in_month,
+                        'monthly_balance' : monthly_balance,
                     }
                 )
 

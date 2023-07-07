@@ -6,11 +6,18 @@ href="{% static 'user_profile/css/home.css' %}" rel="stylesheet" {% endblock %}
   <br />
   <div class="row">
     <div class="col-md-3">
-      <a style="text-decoration: none; color: white" href="#">
+      <a
+        style="text-decoration: none; color: white"
+        href="{% url 'new_value'%}"
+      >
         <div class="card">
           <div class="row">
             <div class="col-md-8">
-              <span class="fonte-destaque">RS 1.000,00</span>
+              {% if total_inputs %}
+              <span class="fonte-destaque">RS {{total_inputs}}</span>
+              {% else %}
+              <span class="fonte-destaque">RS 0,0</span>
+              {% endif %}
             </div>
             <div class="col-md">
               <img
@@ -23,11 +30,18 @@ href="{% static 'user_profile/css/home.css' %}" rel="stylesheet" {% endblock %}
       </a>
     </div>
     <div class="col-md-3">
-      <a style="text-decoration: none; color: white" href="#">
+      <a
+        style="text-decoration: none; color: white"
+        href="{% url 'new_value'%}"
+      >
         <div class="card">
           <div class="row">
             <div class="col-md-8">
-              <span class="fonte-destaque">RS 1.000,00</span>
+              {% if total_outputs %}
+              <span class="fonte-destaque">RS {{total_outputs}}</span>
+              {% else %}
+              <span class="fonte-destaque">RS 0,0</span>
+              {% endif %}
             </div>
             <div class="col-md">
               <img
@@ -76,22 +90,44 @@ href="{% static 'user_profile/css/home.css' %}" rel="stylesheet" {% endblock %}
             <div class="saldo">
               <span class="fonte-destaque">Saldo mensal</span>
               <br />
+              {% if total_inputs_in_month %}
+              <span class="font-light">R$ {{total_inputs_in_month}}</span>
+              {% else %}
               <span class="font-light">R$ 0.000,00</span>
+              {% endif %}
             </div>
           </div>
           <div class="col-md">
             <div class="despesa">
               <span class="fonte-destaque">Despesa mensal</span>
               <br />
+              {% if total_outputs_in_month %}
+              <span class="font-light">R$ {{total_outputs_in_month}}</span>
+              {% else %}
               <span class="font-light">R$ 0.000,00</span>
+              {% endif %}
             </div>
           </div>
         </div>
         <hr class="hr-borda" />
         <span class="fonte-destaque">Total livre</span>
+        {% if monthly_balance %}
+        <span class="font-light negativo">R$ {{monthly_balance}}</span>
+        {% else %}
         <span class="font-light negativo">R$ 0.000,00</span>
+        {% endif %}
         <hr class="hr-borda" />
-        <a href="#" class="botao-principal">Gerenciar dados mensais</a>
+        <a href="{% url 'new_value' %}" class="botao-principal"
+          >Adicionar novo extrato bancário</a
+        >
+        <hr />
+        <a href="{% url 'view_extract' %}" class="botao-principal"
+          >Ver extratos</a
+        >
+        <hr />
+        <a href="{% url 'dashboard' %}" class="botao-principal">
+          Gráfico de gasto mensal por categoria
+        </a>
       </div>
     </div>
   </div>
@@ -103,7 +139,13 @@ href="{% static 'user_profile/css/home.css' %}" rel="stylesheet" {% endblock %}
           <span class="fonte-destaque">Planejamento</span>
         </div>
         <hr class="hr-borda" />
-        <a href="#" class="botao-principal">Definir planejamento</a>
+        <a href="{% url 'define_planning' %}" class="botao-principal"
+          >Definir planejamento</a
+        >
+        <hr />
+        <a href="{% url 'view_planning' %}" class="botao-principal"
+          >Ver planejamento</a
+        >
       </div>
     </div>
     <div class="col-md-8">
@@ -159,7 +201,11 @@ href="{% static 'user_profile/css/home.css' %}" rel="stylesheet" {% endblock %}
 
         <hr class="hr-borda" />
 
-        <a href="#" class="botao-principal">Ver mais</a>
+        <a href="{% url 'define_bill' %}" class="botao-principal"
+          >Definir nova conta</a
+        >
+        <hr />
+        <a href="{% url 'view_bills' %}" class="botao-principal">Ver contas</a>
       </div>
     </div>
   </div>
