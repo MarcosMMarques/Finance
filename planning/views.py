@@ -25,6 +25,16 @@ def update_planning_cost(request, id):
 
 def view_planning(request):
     categorys = Category.objects.all()
-    return render(request, 'view_planning.html', {'categorys' : categorys})
+    total_spend_all_categorys = total_planning_cost_all_categorys = 0
+    for category in categorys:
+        total_spend_all_categorys += category.total_spend()
+        total_planning_cost_all_categorys += category.planning_cost
+    percentage_total_spend_in_all_categorys = int((total_spend_all_categorys * 100) / total_planning_cost_all_categorys)
+
+    return render(request, 'view_planning.html', {'categorys' : categorys,
+                                                  'total_planning_cost_all_categorys' : total_planning_cost_all_categorys,
+                                                  'percentage_total_spend_in_all_categorys' : percentage_total_spend_in_all_categorys,
+                                                  'total_spend_all_categorys' : total_spend_all_categorys,
+                                                  })
 
 

@@ -16,6 +16,27 @@
     <div class="col-md-2 text-center"></div>
     <div class="col-md">
       <div class="card">
+        <p style="margin: auto">Total</p>
+        <div>
+          <span style="float: left !important"
+            >R$ {{total_spend_all_categorys}}</span
+          >
+          <span style="float: right !important"
+            >R$ {{total_planning_cost_all_categorys}}</span
+          >
+        </div>
+        <div class="progress" style="margin-bottom: 35px">
+          <div
+            class="progress-bar progress-bar-striped bg-danger"
+            role="progressbar"
+            style="width: {{percentage_total_spend_in_all_categorys}}%"
+            aria-valuenow="50"
+            aria-valuemin="0"
+            aria-valuemax="100"
+          ></div>
+        </div>
+        <br />
+        <hr />
         {% for category in categorys %}
         <p>{{category}}</p>
         <div>
