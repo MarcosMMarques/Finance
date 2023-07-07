@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'user_profile',
     'bank_statement',
     'planning',
+    'bill',
 ]
 
 MIDDLEWARE = [

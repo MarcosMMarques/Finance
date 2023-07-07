@@ -1,0 +1,64 @@
+{% extends 'bases/base.html' %} {% load static %} {% block 'head' %}
+
+<link href="{% static 'user_profile/css/home.css' %}" rel="stylesheet" />
+<link href="{% static 'user_profile/css/manage.css' %}" rel="stylesheet" />
+
+{% endblock %} {% block 'body' %}
+
+<div class="container">
+  <br />
+  {% if messages %} {% for message in messages %}
+  <div class="alert {{ message.tags }}">{{ message }}</div>
+  {% endfor %} {% endif %}
+  <br />
+  <span class="fonte-destaque">Adicionar contas mensais</span>
+  <div class="row">
+    <div class="col-md-7">
+      <form action="{% url 'define_bill' %}" method="POST">
+        {% csrf_token %}
+        <div class="row">
+          <div class="col-md">
+            <label>Título</label>
+            <input name="title" type="text" class="form-control" />
+          </div>
+
+          <div class="col-md">
+            <label>Categoria</label>
+            <select name="category" class="form-select">
+              {% for category in categorys %}
+              <option value="{{category.id}}">{{category}}</option>
+              {% endfor %}
+            </select>
+          </div>
+        </div>
+        <br />
+        <label>Descrição</label>
+        <textarea name="description" class="form-control"></textarea>
+        <br />
+        <div class="row">
+          <div class="col-md">
+            <label>Valor</label>
+            <input name="value" type="number" class="form-control" />
+          </div>
+
+          <div class="col-md">
+            <label>Dia de pagamento</label>
+            <input name="due_date" type="date" class="form-control" />
+          </div>
+        </div>
+        <br />
+        <br />
+        <input
+          type="submit"
+          style="width: 40%"
+          class="botao-principal"
+          value="Enviar"
+        />
+      </form>
+    </div>
+
+    <div class="col-md-8"></div>
+  </div>
+</div>
+
+{% endblock %}
